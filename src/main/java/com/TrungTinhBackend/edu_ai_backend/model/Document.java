@@ -1,13 +1,18 @@
 package com.TrungTinhBackend.edu_ai_backend.model;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@Accessors(chain = true)
 @org.springframework.data.mongodb.core.mapping.Document(collection = "documents")
 public class Document {
     @Id
