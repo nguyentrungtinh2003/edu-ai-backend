@@ -22,7 +22,7 @@ public class DocumentController {
         this.aiService = aiService;
     }
 
-    @PostMapping("/upload")
+    @PostMapping("upload")
     public ResponseEntity<String> uploadDocument(@RequestParam List<MultipartFile> files, @RequestParam String userId) {
         try {
             aiService.classifyDocuments(files, userId);

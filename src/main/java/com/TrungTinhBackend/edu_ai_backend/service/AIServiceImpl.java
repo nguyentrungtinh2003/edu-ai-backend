@@ -10,6 +10,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -31,17 +32,12 @@ public class AIServiceImpl implements AIService {
     @Value("${ai.api.url}")
     private String apiUrl;
 
-    private final DocumentRepository documentRepository;
-    private final UserRepository userRepository;
-    private final RestTemplate restTemplate;
-
-    public AIServiceImpl(String apiKey, String apiUrl, DocumentRepository documentRepository, UserRepository userRepository, RestTemplate restTemplate) {
-        this.apiKey = apiKey;
-        this.apiUrl = apiUrl;
-        this.documentRepository = documentRepository;
-        this.userRepository = userRepository;
-        this.restTemplate = restTemplate;
-    }
+    @Autowired
+    private DocumentRepository documentRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public List<String> classifyDocuments(List<MultipartFile> files, String userId) throws IOException {
