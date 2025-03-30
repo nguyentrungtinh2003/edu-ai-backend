@@ -1,6 +1,5 @@
 package com.TrungTinhBackend.edu_ai_backend.controller;
 
-import com.TrungTinhBackend.edu_ai_backend.model.Document;
 import com.TrungTinhBackend.edu_ai_backend.service.AIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,12 +17,8 @@ public class DocumentController {
     @Autowired
     private AIService aiService;
 
-    public DocumentController(AIService aiService) {
-        this.aiService = aiService;
-    }
-
     @PostMapping("upload")
-    public ResponseEntity<String> uploadDocument(@RequestParam List<MultipartFile> files, @RequestParam String userId) {
+    public ResponseEntity<String> uploadDocument(@RequestParam("files") List<MultipartFile> files, @RequestParam("userId") String userId) {
         try {
             aiService.classifyDocuments(files, userId);
             return ResponseEntity.ok("Document uploaded successfully");

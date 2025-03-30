@@ -69,13 +69,31 @@ public class AIServiceImpl implements AIService {
 
     private String sendTextToAI(String text, HttpHeaders headers) {
         JSONObject requestBody = new JSONObject();
-        requestBody.put("text", text);
+        requestBody.put("model", "deepseek-chat");
+
+        JSONObject systemMessage = new JSONObject();
+        systemMessage.put("role", "system");
+        systemMessage.put("content", "Bạn là AI chuyên phân loại tài liệu thành các danh mục: Công nghệ, Khoa học, Kinh tế, Sức khỏe.");
+
+        JSONObject userMessage = new JSONObject();
+        userMessage.put("role", "user");
+        userMessage.put("content", "Hãy phân loại tài liệu sau: \n\n" + text);
+
+        requestBody.put("messages", List.of(systemMessage, userMessage));
+        requestBody.put("stream", false);
 
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody.toString(), headers);
         ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
 
+        System.out.println("AI Response: " + response.getBody()); // Thêm dòng này để debug
+
         JSONObject responseJson = new JSONObject(response.getBody());
-        return responseJson.getString("category");
+
+        if (responseJson.has("choices")) {
+            return responseJson.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
+        } else {
+            return "Không nhận được phản hồi phù hợp từ AI.";
+        }
     }
 
     private void saveDocuments(User user, List<MultipartFile> files, List<String> categories) {
